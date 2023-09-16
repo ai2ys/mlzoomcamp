@@ -14,14 +14,19 @@ Question 7 step 5: calculate $(X^TX)^{-1}$
 Question 7 step 7: calculate $w=(X^TX)^{-1}X^Ty$
 
 From the result going backwards to the initial formula:
+
 $$
-w=(X^TX)^{-1}X^Ty
-\\\Leftrightarrow
-(X^TX)w=(X^TX)(X^TX)^{-1}X^Ty
-\\\Leftrightarrow
-X^TXw=X^Ty
-\\\Leftrightarrow
-Xw=y
+\\begin{align*}
+w &= (X^TX)^{-1}X^Ty \\ 
+\Leftrightarrow
+(X^TX)w &= (X^TX)(X^TX)^{-1}X^Ty \\ 
+\Leftrightarrow
+X^TXw &= X^Ty \\ 
+\Leftrightarrow
+Xw &= y
+\\end{align*}
 $$
+
+
 
 Matrix $X$ multiplied by some unknown weights $w$ resulting in $y$.
