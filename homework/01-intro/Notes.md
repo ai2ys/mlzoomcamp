@@ -16,15 +16,15 @@ Question 7 step 7: calculate $w=(X^TX)^{-1}X^Ty$
 From the result going backwards to the initial formula:
 
 $$
-\\begin{align*}
-w &= (X^TX)^{-1}X^Ty \\ 
+\begin{align*}
+w &= (X^T \cdot X)^{-1}X^T \cdot y \\ 
 \Leftrightarrow
-(X^TX)w &= (X^TX)(X^TX)^{-1}X^Ty \\ 
+X^T \cdot X \cdot w &= X^T \cdot X \cdot (X^T \cdot X)^{-1}X^T \cdot y \\ 
 \Leftrightarrow
-X^TXw &= X^Ty \\ 
+X^T \cdot X \cdot w &= X^T \cdot y \\ 
 \Leftrightarrow
-Xw &= y
-\\end{align*}
+X \cdot w &= y
+\end{align*}
 $$
 
 
