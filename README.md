@@ -9,7 +9,7 @@ I setup the environment using Docker. For further information please check the [
 ## Compute email hash
 
 ```bash
-echo -n "your_string" | openssl dgst -sha1
+echo -n "your_email" | openssl dgst -sha1
 ```
 
 There is a ready to use `bash` script.
