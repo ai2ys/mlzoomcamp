@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  mlzoomcamp:
+    entrypoint: /bin/bash -c
+    command: ${CMD:-bash}
+    working_dir: /workspace
+    volumes:
+      # mounting the '01-intro' folder
+      - ./:/workspace
+    build:
+      context: docker
+      dockerfile: dockerfile
+    image: ai2ys/ml-zoomcamp:0.0.0
+    environment:
+      CMD_JUPYTER: "jupyter lab --ip 0.0.0.0 --port 8888 --no-browser --allow-root" 
+    ports:
+      - 8888:8888
+    expose:
+      - 8888
+    hostname: mlzoomcamp
+    container_name: mlzoomcamp
+    tty: true
+    stdin_open: true
+

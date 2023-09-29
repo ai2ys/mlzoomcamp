@@ -1,0 +1,7 @@
+# default Python version, the latest of Python3
+FROM python:3.10-bookworm
+
+RUN pip install --upgrade pip>=23.2.1
+
+COPY requirements.txt /tmp/requirements.txt    
+RUN pip install -r /tmp/requirements.txt
