@@ -55,16 +55,22 @@ This will build the image following the instructions of the `docker-compose.yml`
 The following command will start a `bash` in the container.
 
 ```bash
-docker compose run --rm mlzoomcamp
+docker compose run --rm --service-ports mlzoomcamp
 ```
 
 Which will look like this.
 
 ```shell
-$ docker compose run --rm mlzoomcamp
+$ docker compose run --rm --service-ports mlzoomcamp
 [+] Creating 1/0
  ✔ Network ml-zoomcamp_default  Created            0.0s 
 root@mlzoomcamp:/workspace# 
+```
+
+Use the alias `jlab` for starting JupyterLab from commandline.
+
+```bash
+root@mlzoomcamp:/workspace# jlab
 ```
 
 Stop the container by closing the shell or terminal window.
@@ -74,5 +80,19 @@ root@mlzoomcamp:/workspace# exit
 $
 ```
 
+### Specifying another port for Jupyter Lab
+
+There are two options available for changing the Jupyter notebook port, if required. The default port being used is `8888`.
+
+1. Changing the `PORT_JNB` value in the [`.env`](.env) file.
+
+1. Overwrite the value of `PORT_JNB` at container startup.
+
+    ```bash
+    PORT_JNB=<port of choice> docker compose run \
+        --rm \
+        --service-ports \
+        mlzoomcamp
+    ```
 
 

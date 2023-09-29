@@ -5,18 +5,17 @@ services:
     command: ${CMD:-bash}
     working_dir: /workspace
     volumes:
-      # mounting the '01-intro' folder
       - ./:/workspace
     build:
       context: docker
       dockerfile: dockerfile
     image: ai2ys/ml-zoomcamp:0.0.0
     environment:
-      CMD_JUPYTER: "jupyter lab --ip 0.0.0.0 --port 8888 --no-browser --allow-root" 
+      PORT_JNB:
     ports:
-      - 8888:8888
+      - "${PORT_JNB}:${PORT_JNB}"
     expose:
-      - 8888
+      - "${PORT_JNB}"
     hostname: mlzoomcamp
     container_name: mlzoomcamp
     tty: true
