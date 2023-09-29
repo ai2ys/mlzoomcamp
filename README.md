@@ -21,3 +21,11 @@ There is a ready to use `bash` script.
 ## Homework
 
 The solved homework can be found in directory [homework](homework).
+
+## Leaderboard visualization
+
+Check out Jupyter notebook (using ipywidgets) for Leaderboard visualization. 
+[:link: leaderboard_visualization.ipynb](leaderboard_visualization.ipynb)
+
+
+<img src="images/LeaderBoardVisualization.png" alt="drawing" width="500px"/>
