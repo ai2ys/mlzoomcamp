@@ -2,8 +2,9 @@
     "recommendations": [
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
-        "ms-python.python",
         "bierner.markdown-emoji",
-        "ms-toolsai.jupyter"
+        "ms-python.python",
+        "github.copilot-chat",
+        "github.copilot"
     ]
 }

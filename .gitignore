@@ -1,1 +1,4 @@
 homework/*/*.csv
+homework/05-deployment/data/
+homework/05-deployment/__pycache__/
+homework/05-deployment/model/

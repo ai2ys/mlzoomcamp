@@ -1,0 +1,79 @@
+version: '3.9'
+
+x-shared-base: &shared_base
+  BASE_IMAGE: python:3.10.12-slim-bookworm
+
+
+x-shared-env: &shared_env
+  environment:
+    LANG: C.UTF-8
+    LC_ALL: C.UTF-8
+    PYTHONDONTWRITEBYTECODE: 1
+    PYTHONFAULTHANDLER: 1
+    PYTHONUNBUFFERED: 1
+
+services:
+  pipenv:
+    profiles:
+      - pipenv
+    image: ai2ys/mlzoomcamp/homework/05-deployment/pipenv:0.0.0
+    hostname: pipenv
+    build: 
+      context: docker
+      dockerfile: pipenv.dockerfile
+      args:
+        <<: *shared_base
+    <<: *shared_env
+    volumes:
+      - ./docker:/docker
+    working_dir: /docker
+    entrypoint: /bin/bash
+    tty: true
+
+  app:
+    hostname: serving
+    build:
+      context: docker
+      dockerfile: serving.dockerfile
+      args:
+        <<: *shared_base
+        PIPENV_IMAGE: ai2ys/mlzoomcamp/homework/05-deployment/pipenv:0.0.0
+    <<: *shared_env
+    working_dir: /app
+    image: ai2ys/mlzoomcamp/homework/05-deployment/app:0.0.0
+    ports:
+      - 9696:9696
+    expose:
+      - 9696
+    deploy:
+      replicas: 1
+      mode: replicated
+
+  test_app:
+    # error depends on must be a string
+    depends_on:
+      app:
+        condition: service_started
+    # usage 'cat q3_customer.json | docker-compose run -T --rm test_app'
+    entrypoint: ["/bin/sh"]
+    environment:
+      APP_HOST: "http://app:9696/predict"
+    # command: ["-c", "curl -X POST -H \"Content-Type: application/json\" -d @- http://app:9696/predict 2>/dev/null | python -m json.tool"]
+    command: ["-c", "curl -X POST -H \"Content-Type: application/json\" -d @- http://app:9696/predict | python -m json.tool"]
+    hostname: test_app
+    image: ai2ys/mlzoomcamp/homework/05-deployment/test_app:0.0.0
+    build: 
+      context: docker
+      dockerfile: testapp.dockerfile
+      args:
+        <<: *shared_base
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    links: 
+      - app:serving
+    deploy:
+      replicas: 1
+      mode: replicated
+
+
