@@ -46,4 +46,4 @@ if __name__ == '__main__':
 
 # how can I use curl to do a POST request using a json file?
 # curl -X POST -H "Content-Type: application/json" -d @<json file> <url>
-# curl -X POST -H "Content-Type: application/json" -d '{"income": 5000, "age": 19, "loan": 0, "income": 0, "income": 0}' http://localhost:9696/predict
+# curl -X POST -H "Content-Type: application/json" -d '<json structure>' http://localhost:9696/predict
