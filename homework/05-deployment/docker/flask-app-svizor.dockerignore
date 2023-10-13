@@ -1,0 +1,5 @@
+# ignore all
+*
+# except for
+!serving.py
+!pipenv-pipfile/Pipfile*

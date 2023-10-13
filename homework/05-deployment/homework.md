@@ -14,27 +14,27 @@ Select the option that's closest to your solution.
 * What's the version of pipenv you installed?
 * Use `--version` to find out
 
-
 ---
 
 ### Solving 1
 
 Building the base and pipenv docker images
 ```shell
-cd homework/05-deployment
-docker compose --profile pipenv build pipenv
-````
+$ cd homework/05-deployment
+$ docker compose --profile pipenv build pipenv-generator
+```
 
 Checking the pipenv cersion
 ```shell
-$ docker compose --profile pipenv run --rm pipenv
-root@pipenv:/docker# pipenv --version
-pipenv, version 2023.10.
-````
+$ docker compose --profile pipenv run --rm -it pipenv-generator
+pipenv, version 2023.10.3
+```
+
+### Answer 1
+
+`2023.10.3`
 
 ---
-
-
 
 ## Question 2
 
@@ -48,21 +48,17 @@ and do it there.
 
 ### Solving 2
 
-Installing the libraries
 
 ```shell
-$ docker compose --profile pipenv run --rm pipenv
-root@pipenv:/docker# pipenv --dev
-root@pipenv:/docker# pipenv install \
-    scikit-learn==1.3.1 \
-    flask \
-    gunicorn
-```
+$ docker compose build
+$ grep -A 3 scikit-learn docker/pipenv-pipfile/Pipfile.lock \
+    | sed -n '/sha256/p' \
+    | head -n 1 \
+    | sed 's/.*\([a-f0-9]\{64\}\).*/\1/'
+0c275a06c5190c5ce00af0acbb61c06374087949f643ef32d355ece12c4db043
 
-```shell
-root@pipenv:/docker# grep -A 2 'scikit-learn' Pipfile.lock | sed -n '3p' | tr -d '[:space:]' && echo
-"sha256:0c275a06c5190c5ce00af0acbb61c06374087949f643ef32d355ece12c4db043",
 ```
+### Answer 2
 
 `0c275a06c5190c5ce00af0acbb61c06374087949f643ef32d355ece12c4db043`
 
@@ -125,6 +121,7 @@ $ md5sum model1.bin dv.bin
 6b7cded86a52af7e81859647fa3a5c2e  dv.bin
 ```
 
+
 ---
 
 ### Solution 3
@@ -142,19 +139,17 @@ docker compose build
 ```
 
 ```shell
-echo '{"job": "retired", "duration": 445, "poutcome": "success"}' > q3_customer.json
-
-cat q3_customer.json | docker compose run -T --rm test_app 2>/dev/null
-```
-
-### Answer 3
-
-```json
+$ echo '{"job": "retired", "duration": 445, "poutcome": "success"}' \
+    | docker compose run -T --rm test-app 2>/dev/null
 {
     "loan": true,
     "loan_probability": 0.9019309332297606
 }
 ```
+
+### Answer 3
+    
+`0.902`
 
 ---
 
@@ -185,19 +180,17 @@ What's the probability that this client will get a credit?
 ### Solution 4
 
 ```shell
-echo '{"job": "unknown", "duration": 270, "poutcome": "failure"}' > q4_customer.json
-
-docker compose run --rm test_app -c "python request.py --client q4_customer.json" 
-```
-
-### Answer 4
-
-```json
+$ CLIENT='{"job": "unknown", "duration": 270, "poutcome": "failure"}'
+$ docker compose run --rm test-app -c "python request.py --client '${CLIENT}'" 2>/dev/null
 {
   "loan": false,
   "loan_probability": 0.13968947052356817
 }
 ```
+
+### Answer 4
+
+`0.140`
 
 ---
 
@@ -295,26 +288,25 @@ What's the probability that this client will get a credit now?
 * 0.730
 * 0.968
 
+---
 
 ### Solution 6
 
 ```shell
-echo '{"job": "retired", "duration": 445, "poutcome": "success"}' > q6_customer.json
-
-docker compose run --rm test_app -c "python request.py --client q6_customer.json" 
-
-cat q6_customer.json | docker compose run -T --rm test_app 
-
-```
-
-### Answer 4
-
-```json
+$ CLIENT='{"job": "retired", "duration": 445, "poutcome": "success"}'
+$ docker compose run --rm -T \
+  --env APP_HOST=flask-app-svizor test-app -c "python request.py --client '${CLIENT}'" \
+  2>/dev/null
 {
   "loan": true,
-  "loan_probability": 0.9019309332297606
+  "loan_probability": 0.726936946355423
 }
-```
+
+### Answer 6
+
+`0.730`
+
+---
 
 ## Submit the results
 

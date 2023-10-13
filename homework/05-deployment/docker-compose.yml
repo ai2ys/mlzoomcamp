@@ -1,9 +1,5 @@
 version: '3.9'
 
-x-shared-base: &shared_base
-  BASE_IMAGE: python:3.10.12-slim-bookworm
-
-
 x-shared-env: &shared_env
   environment:
     LANG: C.UTF-8
@@ -12,66 +8,88 @@ x-shared-env: &shared_env
     PYTHONFAULTHANDLER: 1
     PYTHONUNBUFFERED: 1
 
+x-shared-args: &shared_args
+  VERSION_PIPENV:
+  VERSION_PIP:
+  BASE_IMAGE:
+
 services:
-  pipenv:
+  pipenv-generator:
     profiles:
       - pipenv
-    image: ai2ys/mlzoomcamp/homework/05-deployment/pipenv:0.0.0
-    hostname: pipenv
+    image: ${PIPENV_IMAGE}
+    hostname: pipenv-generator
     build: 
       context: docker
-      dockerfile: pipenv.dockerfile
+      dockerfile: pipenv-generator.dockerfile
       args:
-        <<: *shared_base
+        <<: *shared_args
     <<: *shared_env
+    working_dir: /host
     volumes:
-      - ./docker:/docker
-    working_dir: /docker
-    entrypoint: /bin/bash
+      - ./docker/pipenv-pipfile:/host
     tty: true
 
-  app:
-    hostname: serving
+  flask-app:
+    hostname: flask-app
+    container_name: flask-app
+    image: ${IMAGE_BASE_NAME}/flask-app:0.0.0
     build:
       context: docker
-      dockerfile: serving.dockerfile
+      dockerfile: flask-app.dockerfile
       args:
-        <<: *shared_base
-        PIPENV_IMAGE: ai2ys/mlzoomcamp/homework/05-deployment/pipenv:0.0.0
+        <<: *shared_args
+        PIPENV_IMAGE:
     <<: *shared_env
-    working_dir: /app
-    image: ai2ys/mlzoomcamp/homework/05-deployment/app:0.0.0
     ports:
-      - 9696:9696
-    expose:
-      - 9696
+      - ${APP_PORT}:9696
     deploy:
       replicas: 1
       mode: replicated
 
-  test_app:
-    # error depends on must be a string
-    depends_on:
-      app:
-        condition: service_started
-    # usage 'cat q3_customer.json | docker-compose run -T --rm test_app'
-    entrypoint: ["/bin/sh"]
-    environment:
-      APP_HOST: "http://app:9696/predict"
-    # command: ["-c", "curl -X POST -H \"Content-Type: application/json\" -d @- http://app:9696/predict 2>/dev/null | python -m json.tool"]
-    command: ["-c", "curl -X POST -H \"Content-Type: application/json\" -d @- http://app:9696/predict | python -m json.tool"]
-    hostname: test_app
-    image: ai2ys/mlzoomcamp/homework/05-deployment/test_app:0.0.0
+  flask-app-svizor:
+    hostname: flask-app-svizor
+    container_name: flask-app-svizor
+    image: ${IMAGE_BASE_NAME}/flask-app-svizor:0.0.0
+    build:
+      context: docker
+      dockerfile: flask-app-svizor.dockerfile
+      args:
+        <<: *shared_args
+        PIPENV_IMAGE:
+    <<: *shared_env
+    ports:
+      - ${APP_PORT_SVIZOR}:9696
+    deploy:
+      replicas: 1
+      mode: replicated
+
+  test-app:
+    hostname: test-app
+    container_name: test-app
+    image: ${IMAGE_BASE_NAME}/test-app:0.0.0
     build: 
       context: docker
       dockerfile: testapp.dockerfile
       args:
-        <<: *shared_base
+        BASE_IMAGE:
+    command: ["-c", "set -x && curl -X POST -H \"Content-Type: application/json\" -d @- http://${APP_HOST}:${APP_PORT}/${FUNCTION_NAME} 2>/dev/null | python -m json.tool"]
+    depends_on:
+      flask-app:
+        condition: service_started
+      flask-app-svizor:
+        condition: service_started
+    links: 
+      - flask-app:serving
+      - flask-app-svizor:serving
+    # usage 'cat q3_customer.json | docker-compose run -T --rm test-app'
+    environment:
+      APP_HOST:
+      APP_PORT:
+      FUNCTION_NAME:
     working_dir: /workspace
     volumes:
       - ./:/workspace
-    links: 
-      - app:serving
     deploy:
       replicas: 1
       mode: replicated

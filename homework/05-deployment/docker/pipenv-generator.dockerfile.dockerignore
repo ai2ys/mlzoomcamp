@@ -1,4 +1,5 @@
 # ignore all
 * 
 # except this file:
-!Pipfile*
+!pipenv-generator-requirements.txt
+
