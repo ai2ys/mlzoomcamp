@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import os
 
 from flask import Flask, request, jsonify
 
@@ -11,9 +12,14 @@ def predict_single(customer, dv, model):
 
 model = None
 dv = None
-with open('/app/model/model1.bin', 'rb') as f:
+model_path = os.environ.get('MODEL_PATH')
+dv_path = os.environ.get('DV_PATH')
+print(f"model_path: {model_path}")
+print(f"dv_path: {dv_path}")
+
+with open(model_path, 'rb') as f:
     model = pickle.load(f)
-with open('/app/model/dv.bin', 'rb') as f:
+with open(dv_path, 'rb') as f:
     dv = pickle.load(f)
 
 app = Flask('credit-score')

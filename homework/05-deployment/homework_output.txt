@@ -1,0 +1,27 @@
+Question 1
+pipenv, version 2023.10.3
+
+Question 2
+0c275a06c5190c5ce00af0acbb61c06374087949f643ef32d355ece12c4db043
+
+Question 3
+{
+    "loan": true,
+    "loan_probability": 0.9019309332297606
+}
+
+Question 4
+{
+  "loan": false,
+  "loan_probability": 0.13968947052356817
+}
+
+Question 5
+147MB
+
+Question 6
+{
+  "loan": true,
+  "loan_probability": 0.726936946355423
+}
+
