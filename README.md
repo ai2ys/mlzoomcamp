@@ -4,7 +4,7 @@ Notes and homework for DataTalkClub's Machine Learning Zoomcamp ([GitHub link](h
 
 ## Environment setup
 
-I setup the environment using Docker. For further information please check the [EnvironmentSetupUsingDocker.md](EnvironmentSetupUsingDocker).
+I setup the environment using Docker. For further information please check the [EnvironmentSetupUsingDocker.md](EnvironmentSetupUsingDocker.md).
 
 ## Compute email hash
 
