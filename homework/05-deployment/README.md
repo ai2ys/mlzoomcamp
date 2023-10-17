@@ -120,7 +120,7 @@ $ echo '{"job": "retired", "duration": 445, "poutcome": "success"}' | docker com
 #### Underlying curl commands used
 
 ```shell	
-cat <json file path> | \
+echo '<json data>' | \
     curl \
     -X POST \
     -H \"Content-Type: application/json\" \
@@ -128,4 +128,9 @@ cat <json file path> | \
     http://localhost:9696/predict 
 ```
 
+Shorter version doing the same trick
+
+```shell
+echo '<json data>' | curl --json @- http://localhost:9696/predict 
+```
 
