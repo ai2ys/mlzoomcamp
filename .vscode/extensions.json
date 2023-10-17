@@ -5,6 +5,7 @@
         "bierner.markdown-emoji",
         "ms-python.python",
         "github.copilot-chat",
-        "github.copilot"
+        "github.copilot",
+        "bierner.github-markdown-preview"
     ]
 }
