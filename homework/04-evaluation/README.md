@@ -1,8 +1,8 @@
-# Homework 03
+# Homework 04
 
 The instruction can be found here: 
 
-https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/master/cohorts/2023/03-classification/homework.md
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/master/cohorts/2023/04-evaluation/homework.md
 
 Jupyter notebook containing homework:
 
