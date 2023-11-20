@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  deep-learning:
+    hostname: deep-learning
+    container_name: deep-learning
+    image: tensorflow/tensorflow:2.14.0-gpu-jupyter
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    ports: 
+      - 8888:8888
+    tty: true
+    # this section is required for the GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            # specify a single or mutliple GPU indices or UUIDs here
+            device_ids: ['${GPU_ID}']
+            capabilities: [gpu]

@@ -2,3 +2,5 @@ homework/*/*.csv
 homework/05-deployment/data/
 homework/05-deployment/__pycache__/
 homework/05-deployment/model/
+homework/08-deep-learning/data/
+homework/08-deep-learning/data.zip
