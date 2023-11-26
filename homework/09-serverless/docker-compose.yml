@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  aws-lambda:
+    image: aws-lambda.bees-wasps-v2.tflite
+    container_name: aws-lambda
+    build:
+      context: docker
+      dockerfile: aws-lambda.dockerfile
+    tty: true
+    ports:
+      - "8080:8080"
+    
+  serverless:
+    hostname: serverless
+    container_name: serverless
+    image: tensorflow/tensorflow:2.14.0-gpu-jupyter
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    ports: 
+      - 8888:8888
+    tty: true
+    # this section is required for the GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            # specify a single or mutliple GPU indices or UUIDs here
+            device_ids: ['${GPU_ID}']
+            capabilities: [gpu]
