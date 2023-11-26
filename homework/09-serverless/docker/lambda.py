@@ -1,4 +1,7 @@
 import os
+import numpy as np
+import requests
+from PIL import Image
 import tflite_runtime.interpreter as tflite
 from keras_image_helper import create_preprocessor
 import logging
@@ -21,7 +24,21 @@ output_index = interpreter.get_output_details()[0]['index']
 
 def predict(url):
     logging.info(f'predict url: "{url}"')
-    X = preprocessor.from_url(url)
+    # read image as RGB from url
+    r = requests.get(url, stream=True)
+    img = Image.open(r.raw)
+    # convert image to RGB if not already
+    if img.mode!= 'RGB':
+        img = img.convert('RGB')
+    # resize
+    img = img.resize((150, 150))
+    img = np.asarray(img).astype(np.float32)
+    # scale to [0, 1]
+    img = img / 255.0
+    # convert image to numpy array
+    X = np.expand_dims(img, axis=0)
+    
+    #X = preprocessor.from_url(url)
     interpreter.set_tensor(input_index, X)
     interpreter.invoke()
     preds = interpreter.get_tensor(output_index)

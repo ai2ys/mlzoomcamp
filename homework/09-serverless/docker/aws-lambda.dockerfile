@@ -7,6 +7,7 @@ ENV MODEL_NAME=bees-wasps-v2.tflite
 COPY --from=model /var/task/${MODEL_NAME} .
 COPY lambda.py .
 
+RUN pip install requests Pillow numpy
 
 # <python file title>.lambda_handler
 CMD [ "lambda.lambda_handler" ]
